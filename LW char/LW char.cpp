@@ -38,11 +38,12 @@ int getSimpleWords(char str[], char* destination[])
 
     while (strlen(str) > 0)
     {
-        char temp[100];
-        int wordLength = getFirstWord(str, temp);
+        //char temp[100];
+        destination[counter] = new char[100];
+        int wordLength = getFirstWord(str, destination[counter]);
 
-        if (!checkWord(temp))
-            destination[counter++] = temp;
+        if (!checkWord(destination[counter]))
+            counter++;
     }
 
     return counter;
@@ -51,17 +52,18 @@ int getSimpleWords(char str[], char* destination[])
 int getFirstWord(char str[], char destination[])
 {
     int i = 0;
-    cout << strlen(str);
     for (; i < strlen(str); i++)
     {
-        if (str[i] == ' ' || i <= strlen(str))
+        if (str[i] == ' ' || i >= strlen(str))
         {
             strncpy_s(destination, i + 1, str, i);
             strcpy_s(str, strlen(str) - i, &str[i + 1]);
-            break;
+            return i;
         }
     }
 
+    strncpy_s(destination, i + 1, str, i);
+    memset(str, 0, strlen(str));
     return i;
 }
 
@@ -73,7 +75,7 @@ bool checkWord(char word[])
 
     reverseCharArray(reversedWord);
     
-    return reversedWord == word;
+    return (* reversedWord) == (*word);
 }
 
 void reverseCharArray(char arr[])
